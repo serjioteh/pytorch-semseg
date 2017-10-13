@@ -48,10 +48,15 @@ def validate(args):
         outputs = model(images)
         pred = outputs.data.max(1)[1].cpu().numpy()
         gt = labels.data.cpu().numpy()
-        if i % 100 == 0:
+        if i % 50 == 0:
             # prediction mask
-            vis.images(outputs, opts=dict(title='Prediction masks', caption='...'),)
-            vis.images(gt, opts=dict(title='Target masks', caption='...'),)
+            vis.images(np.expand_dims(pred, axis=1), opts=dict(title='Prediction masks', caption='...'),)
+            # target mask
+            vis.images(np.expand_dims(gt, axis=1), opts=dict(title='Target masks', caption='...'),)
+
+            #colored_target = loader.decode_segmap(gt[0])
+            #colored_target = np.transpose(colored_target, [2,0,1])
+            #vis.images(colored_target, opts=dict(title='Target masks', caption='...'),)
 
         for gt_, pred_ in zip(gt, pred):
             gts.append(gt_)
