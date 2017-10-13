@@ -14,6 +14,8 @@ from tqdm import tqdm
 from ptsemseg.loader import get_loader, get_data_path
 from ptsemseg.metrics import scores
 
+CUDA_ID = 3
+
 def validate(args):
 
     # Setup Dataloader
@@ -28,19 +30,19 @@ def validate(args):
     model.eval()
 
     if torch.cuda.is_available():
-        model.cuda(0)
+        model.cuda(CUDA_ID)
 
     gts, preds = [], []
     for i, (images, labels) in tqdm(enumerate(valloader)):
         if torch.cuda.is_available():
-            images = Variable(images.cuda(0))
-            labels = Variable(labels.cuda(0))
+            images = Variable(images.cuda(CUDA_ID))
+            labels = Variable(labels.cuda(CUDA_ID))
         else:
             images = Variable(images)
             labels = Variable(labels)
 
         outputs = model(images)
-        pred = np.squeeze(outputs.data.max(1)[1].cpu().numpy(), axis=1)
+        pred = outputs.data.max(1)[1].cpu().numpy()
         gt = labels.data.cpu().numpy()
         
         for gt_, pred_ in zip(gt, pred):
