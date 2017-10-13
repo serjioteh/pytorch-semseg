@@ -16,6 +16,8 @@ from ptsemseg.loss import cross_entropy2d
 from ptsemseg.metrics import scores
 from lr_scheduling import *
 
+VISDOM_PORT = 5001
+
 def train(args):
 
     # Setup Dataloader
@@ -26,7 +28,7 @@ def train(args):
     trainloader = data.DataLoader(loader, batch_size=args.batch_size, num_workers=4, shuffle=True)
 
     # Setup visdom for visualization
-    vis = visdom.Visdom()
+    vis = visdom.Visdom(port=VISDOM_PORT)
 
     loss_window = vis.line(X=torch.zeros((1,)).cpu(),
                            Y=torch.zeros((1)).cpu(),
