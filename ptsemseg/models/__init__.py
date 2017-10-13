@@ -7,7 +7,6 @@ from ptsemseg.models.pspnet import *
 from ptsemseg.models.linknet import *
 
 
-
 def get_model(name, n_classes):
     model = _get_model_instance(name)
 
