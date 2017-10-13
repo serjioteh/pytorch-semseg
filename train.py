@@ -16,6 +16,8 @@ from ptsemseg.loss import cross_entropy2d
 from ptsemseg.metrics import scores
 from lr_scheduling import *
 
+
+CUDA_ID = 3
 VISDOM_PORT = 5001
 
 def train(args):
@@ -25,7 +27,7 @@ def train(args):
     data_path = get_data_path(args.dataset)
     loader = data_loader(data_path, is_transform=True, img_size=(args.img_rows, args.img_cols))
     n_classes = loader.n_classes
-    trainloader = data.DataLoader(loader, batch_size=args.batch_size, num_workers=4, shuffle=True)
+    trainloader = data.DataLoader(loader, batch_size=args.batch_size, num_workers=3, shuffle=True)
 
     # Setup visdom for visualization
     vis = visdom.Visdom(port=VISDOM_PORT)
@@ -41,26 +43,26 @@ def train(args):
     model = get_model(args.arch, n_classes)
 
     if torch.cuda.is_available():
-        model.cuda(0)
+        model.cuda(CUDA_ID)
         test_image, test_segmap = loader[0]
-        test_image = Variable(test_image.unsqueeze(0).cuda(0))
+        test_image = Variable(test_image.unsqueeze(0).cuda(CUDA_ID))
     else:
         test_image, test_segmap = loader[0]
         test_image = Variable(test_image.unsqueeze(0))
 
-    optimizer = torch.optim.SGD(model.parameters(), lr=args.l_rate, momentum=0.99, weight_decay=5e-4)
+    optimizer = torch.optim.SGD(model.parameters(), lr=args.l_rate, momentum=0.9, weight_decay=5e-4)
 
     for epoch in range(args.n_epoch):
         for i, (images, labels) in enumerate(trainloader):
             if torch.cuda.is_available():
-                images = Variable(images.cuda(0))
-                labels = Variable(labels.cuda(0))
+                images = Variable(images.cuda(CUDA_ID))
+                labels = Variable(labels.cuda(CUDA_ID))
             else:
                 images = Variable(images)
                 labels = Variable(labels)
 
-            iter = len(trainloader)*epoch + i
-            poly_lr_scheduler(optimizer, args.l_rate, iter)
+            # iter = len(trainloader)*epoch + i
+            # poly_lr_scheduler(optimizer, args.l_rate, iter)
             
             optimizer.zero_grad()
             outputs = model(images)
