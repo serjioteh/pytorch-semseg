@@ -27,7 +27,7 @@ def train(args):
     data_path = get_data_path(args.dataset)
     loader = data_loader(data_path, is_transform=True, img_size=(args.img_rows, args.img_cols))
     n_classes = loader.n_classes
-    trainloader = data.DataLoader(loader, batch_size=args.batch_size, num_workers=3, shuffle=True)
+    trainloader = data.DataLoader(loader, batch_size=args.batch_size, num_workers=0, shuffle=True)
 
     # Setup visdom for visualization
     vis = visdom.Visdom(port=VISDOM_PORT)
