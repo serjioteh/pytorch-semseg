@@ -39,8 +39,14 @@ def train(args):
                                      title='Training Loss',
                                      legend=['Loss']))
 
+
     # Setup Model
-    model = get_model(args.arch, n_classes)
+    start_epoch = 0
+    if args.model_path is not None:
+        model = torch.load(args.model_path)
+        start_epoch = args.model_path.split('.')[0].split('_')[3] + 1
+    else:
+        model = get_model(args.arch, n_classes)
 
     if torch.cuda.is_available():
         model.cuda(CUDA_ID)
@@ -52,7 +58,7 @@ def train(args):
 
     optimizer = torch.optim.SGD(model.parameters(), lr=args.l_rate, momentum=0.9, weight_decay=5e-4)
 
-    for epoch in range(args.n_epoch):
+    for epoch in range(start_epoch, args.n_epoch):
         for i, (images, labels) in enumerate(trainloader):
             if torch.cuda.is_available():
                 images = Variable(images.cuda(CUDA_ID))
@@ -108,6 +114,8 @@ if __name__ == '__main__':
     parser.add_argument('--l_rate', nargs='?', type=float, default=1e-5, 
                         help='Learning Rate')
     parser.add_argument('--feature_scale', nargs='?', type=int, default=1, 
-                        help='Divider for # of features to use')    
+                        help='Divider for # of features to use')
+    parser.add_argument('--model_path', nargs='?', type=str, default=None,
+                        help='Path to the saved model')
     args = parser.parse_args()
     train(args)
