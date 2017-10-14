@@ -1,12 +1,12 @@
 {
   "pascal":
   {
-    "data_path": "/mnt/hdd/voc2012/VOCdevkit/VOC2012/"
+    "data_path": "/mnt/ssd/portraits/VOC2012/VOCdevkit/VOC2012/"
   },
 
   "sbd":
   {
-    "data_path": "/mnt/hdd/voc2012/benchmark_RELEASE/"
+    "data_path": "/mnt/ssd/portraits/VOC2012/benchmark_RELEASE/"
   },
 
   "camvid":
