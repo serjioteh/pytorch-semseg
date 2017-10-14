@@ -44,7 +44,7 @@ def train(args):
     start_epoch = 0
     if args.model_path is not None:
         model = torch.load(args.model_path)
-        start_epoch = args.model_path.split('.')[0].split('_')[3] + 1
+        start_epoch = int(args.model_path.split('.')[0].split('_')[3]) + 1
     else:
         model = get_model(args.arch, n_classes)
 
