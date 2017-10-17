@@ -111,7 +111,7 @@ if __name__ == '__main__':
                         help='# of the epochs')
     parser.add_argument('--batch_size', nargs='?', type=int, default=1, 
                         help='Batch Size')
-    parser.add_argument('--l_rate', nargs='?', type=float, default=1e-5, 
+    parser.add_argument('--l_rate', nargs='?', type=float, default=1e-4, 
                         help='Learning Rate')
     parser.add_argument('--feature_scale', nargs='?', type=int, default=1, 
                         help='Divider for # of features to use')
