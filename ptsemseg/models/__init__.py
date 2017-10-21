@@ -3,6 +3,7 @@ import torchvision.models as models
 from ptsemseg.models.fcn import *
 from ptsemseg.models.segnet import *
 from ptsemseg.models.unet import *
+from ptsemseg.models.unet2 import *
 from ptsemseg.models.pspnet import *
 from ptsemseg.models.linknet import *
 
@@ -23,6 +24,9 @@ def get_model(name, n_classes):
 
     elif name == 'unet':
         model = model(num_classes=n_classes)
+    elif name == 'unet2':
+        model = model(num_classes=n_classes)
+
     else:
         raise 'Model {} not available'.format(name)
 
@@ -34,6 +38,7 @@ def _get_model_instance(name):
         'fcn8s': fcn8s,
         'fcn16s': fcn16s,
         'unet': UNet,
+        'unet2': UNet2,
         'segnet': segnet,
         'pspnet': pspnet,
         'linknet': linknet,
